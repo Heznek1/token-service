@@ -1,1 +1,3 @@
 .vs
+TokenService/obj
+TokenService.Tests/obj
