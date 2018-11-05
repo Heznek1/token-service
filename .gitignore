@@ -1,3 +1,5 @@
 .vs
-TokenService/obj
-TokenService.Tests/obj
+TokenService/obj/*
+TokenService/bin/*
+TokenService.Tests/obj/*
+TokenService.Tests/bin/*
