@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace TokenService
 {
@@ -11,6 +9,16 @@ namespace TokenService
         {
             // Web API configuration and services
             config.Filters.Add(new AuthorizeAttribute());
+
+            // CORS Attributes
+            var corsAttribute = new EnableCorsAttribute("*", "*", "*");
+
+            // Enable CORS
+            config.EnableCors(corsAttribute);
+
+            // JSON Return type
+            config.Formatters.JsonFormatter.SupportedMediaTypes
+                .Add(new System.Net.Http.Headers.MediaTypeHeaderValue("text/html"));
 
             // Web API routes
             config.MapHttpAttributeRoutes();

@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Security;
-using UserModel = Shared.Identity_Provider.User;
 
 namespace TokenService
 {
@@ -11,7 +10,7 @@ namespace TokenService
     {
         private const string Secret = Token.Secret;
 
-        public static string GenerateToken(UserModel user, int expireMinutes = 20)
+        public static dynamic GenerateToken(User user, int expireMinutes = 20)
         {
             var symmetricKey = Convert.FromBase64String(Secret);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -21,9 +20,7 @@ namespace TokenService
             {
                 Subject = new ClaimsIdentity(new[]
                         {
-                            new Claim(ClaimTypes.Name, user.username),
-                            new Claim(ClaimTypes.Role, user.role.ToString()),
-                            new Claim(ClaimTypes.System, user.instance.ToString())
+                            new Claim(ClaimTypes.Name, user.username)
                         }),
 
                 Expires = now.AddMinutes(Convert.ToInt32(expireMinutes)),
@@ -34,7 +31,12 @@ namespace TokenService
             var stoken = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(stoken);
 
-            return token;
+            return new
+            {
+                token,
+                user.role,
+                user.instance
+            };
         }
 
         public static ClaimsPrincipal GetPrincipal(string token)
@@ -63,7 +65,7 @@ namespace TokenService
                 return principal;
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Web.Http;
-using UserModel = Shared.Identity_Provider.User;
+using Shared.Utils;
+using UserCredentials = Shared.View_Model.UserAuthenticationViewModel;
 
 namespace TokenService.Controllers
 {
@@ -9,9 +11,15 @@ namespace TokenService.Controllers
         [Route("api/authenticate")]
         [HttpPost]
         [AllowAnonymous]
-        public string Get(UserModel user)
+        public dynamic Get(UserCredentials credentials)
         {
-            if (CheckUser(user))
+            if (string.IsNullOrEmpty(credentials?.username) || string.IsNullOrEmpty(credentials?.password))
+            {
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            }
+
+            var user = this.CheckUser(credentials);
+            if (user.id != 0)
             {
                 return JwtManager.GenerateToken(user);
             }
@@ -19,10 +27,22 @@ namespace TokenService.Controllers
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
 
-        public bool CheckUser(UserModel user)
+        private User CheckUser(UserCredentials credentials)
         {
-            // should check in the database
-            return true;
+            var found = this.GetUserFromDatabase(credentials?.username, credentials?.password.EncryptPassword());
+            if (found != null)
+            {
+                return found;
+            }
+            return new User(){ id = 0 };
+        }
+
+        private User GetUserFromDatabase(string username, string password)
+        {
+            using (var tokenServiceEntities = new TokeServiceDbEntities())
+            {
+                return tokenServiceEntities.Users.FirstOrDefault(user => user.username == username && user.password == password);
+            }
         }
     }
 }

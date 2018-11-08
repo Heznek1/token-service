@@ -37,8 +37,6 @@ namespace TokenService.Filters
                 context.Principal = principal;
         }
 
-
-
         private static bool ValidateToken(string token, out string username)
         {
             username = null;
@@ -58,8 +56,6 @@ namespace TokenService.Filters
             if (string.IsNullOrEmpty(username))
                 return false;
 
-            // More validate to check whether username exists in system
-
             return true;
         }
 
@@ -69,11 +65,9 @@ namespace TokenService.Filters
 
             if (ValidateToken(token, out username))
             {
-                // based on username to get more information from database in order to build local identity
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, username)
-                    // Add more claims if needed: Roles, ...
                 };
 
                 var identity = new ClaimsIdentity(claims, "Jwt");
