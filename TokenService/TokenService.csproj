@@ -159,8 +159,10 @@
     <Compile Include="Instance.cs">
       <DependentUpon>TokenServiceEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="JwtManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>TokenServiceEntities.tt</DependentUpon>
     </Compile>

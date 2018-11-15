@@ -19,5 +19,7 @@ namespace TokenService
         public string password { get; set; }
         public Nullable<int> instance { get; set; }
         public Nullable<int> role { get; set; }
+        public string guid { get; set; }
+        public string email { get; set; }
     }
 }
