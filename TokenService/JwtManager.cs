@@ -20,7 +20,9 @@ namespace TokenService
             {
                 Subject = new ClaimsIdentity(new[]
                         {
-                            new Claim(ClaimTypes.Name, user.username)
+                            new Claim(ClaimTypes.Name, user.username),
+                            new Claim(ClaimTypes.Role, user.role.ToString()),
+                            new Claim(ClaimTypes.Actor, user.instance.ToString()), 
                         }),
 
                 Expires = now.AddMinutes(Convert.ToInt32(expireMinutes)),

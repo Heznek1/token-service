@@ -37,9 +37,11 @@ namespace TokenService.Filters
                 context.Principal = principal;
         }
 
-        private static bool ValidateToken(string token, out string username)
+        private static bool ValidateToken(string token, out string username, out string role, out string instance)
         {
             username = null;
+            role = null;
+            instance = null;
 
             var simplePrinciple = JwtManager.GetPrincipal(token);
             var identity = simplePrinciple?.Identity as ClaimsIdentity;
@@ -51,7 +53,13 @@ namespace TokenService.Filters
                 return false;
 
             var usernameClaim = identity.FindFirst(ClaimTypes.Name);
+            var roleClaim = identity.FindFirst(ClaimTypes.Role);
+            var instanceClaim = identity.FindFirst(ClaimTypes.Actor);
+
             username = usernameClaim?.Value;
+            role = roleClaim?.Value;
+            instance = instanceClaim?.Value;
+
 
             if (string.IsNullOrEmpty(username))
                 return false;
@@ -62,12 +70,16 @@ namespace TokenService.Filters
         protected Task<IPrincipal> AuthenticateJwtToken(string token)
         {
             string username;
+            string role;
+            string instance;
 
-            if (ValidateToken(token, out username))
+            if (ValidateToken(token, out username, out role, out instance))
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, role),
+                    new Claim(ClaimTypes.Actor, instance)
                 };
 
                 var identity = new ClaimsIdentity(claims, "Jwt");
