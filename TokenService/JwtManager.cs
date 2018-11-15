@@ -22,7 +22,8 @@ namespace TokenService
                         {
                             new Claim(ClaimTypes.Name, user.username),
                             new Claim(ClaimTypes.Role, user.role.ToString()),
-                            new Claim(ClaimTypes.Actor, user.instance.ToString()), 
+                            new Claim(ClaimTypes.Actor, user.instance.ToString()),
+                            new Claim(ClaimTypes.Hash, user.guid) 
                         }),
 
                 Expires = now.AddMinutes(Convert.ToInt32(expireMinutes)),
