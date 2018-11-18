@@ -65,7 +65,7 @@ namespace TokenService.Controllers
             }
             catch (System.Exception ex)
             {
-                throw new HttpException(ex.Message);
+                return InternalServerError(ex);
             }
         }
 
