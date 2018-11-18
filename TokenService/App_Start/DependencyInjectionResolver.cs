@@ -2,6 +2,8 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using TokenService.Helpers;
+using TokenService.Helpers.Interfaces;
 using TokenService.Interfaces;
 using TokenService.Repositories;
 
@@ -27,6 +29,7 @@ namespace TokenService
 
             // Register components
             builder.RegisterType<UserRepository>().As<IUserRepository>();
+            builder.RegisterType<SubscribersEvents>().As<ISubscribersEvents>();
 
             // Set dependency to Autofac
             container = builder.Build();

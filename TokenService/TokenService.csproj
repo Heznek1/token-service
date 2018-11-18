@@ -156,6 +156,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Interfaces\ISubscribersEvents.cs" />
+    <Compile Include="Helpers\SubscribersEvents.cs" />
     <Compile Include="Instance.cs">
       <DependentUpon>TokenServiceEntities.tt</DependentUpon>
     </Compile>
@@ -170,6 +172,9 @@
       <DependentUpon>TokenServiceEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>TokenServiceEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Subscriber.cs">
       <DependentUpon>TokenServiceEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagram.cs">
